@@ -3,7 +3,7 @@ hello : hello.o
 	gcc -o hello hello.o
 
 hello.o : hello.c
-	gcc -c hello.c -o hello.o
+	gcc -c hello.c -o hello.o -I./include/
 
 .PHONY : clean # 将clean当作伪目标，不会因为有同名的clean文件而不执行clean操作
 clean :
@@ -11,4 +11,5 @@ clean :
 	rm *.o
 
 print : 
-	echo $(subMakefile)
+	@echo $(.INCLUDE_DIRS)
+	@echo $(subMakefile)
