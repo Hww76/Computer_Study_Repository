@@ -6,3 +6,4 @@ hello.o : hello.c
 
 clean :
 	rm hello
+	rm *.o
