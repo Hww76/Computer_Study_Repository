@@ -1,5 +1,6 @@
-include ./dir/makefile
-INCLUDES = -I./include/
+include ./dir/makefile # 引入子文件
+INCLUDES = -I./include/ # 自定义头文件夹
+export HELLO = hi # 自定义环境变量
 
 hello : hello.o
 	gcc -o hello hello.o
@@ -13,5 +14,7 @@ clean :
 	rm *.o
 
 print : 
-	@echo $(.INCLUDE_DIRS)
-	@echo $(subMakefile)
+	@echo $(.INCLUDE_DIRS) # 打印系统头文件地址
+	@echo $(subMakefile) # 打印子文件中的变量
+	@echo $(USER) # 打印系统环境变量
+	@echo $(HELLO) # 打印自定义环境变量
