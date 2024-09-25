@@ -9,6 +9,6 @@
 # 2024年
 ## 9月
 9/25
-* 学习[make](https://www.bilibili.com/video/BV1xC4y1d7Xs/)语法，看完P1-P16
-* 学习[Rust](https://simonkorl.gitbook.io/r-z-rustos-guide/dai-ma-zhi-qian/)语法，完成ex1
+* 学习[make](https://www.bilibili.com/video/BV1xC4y1d7Xs/)语法，看完P1-P16。[作者文档笔记](https://www.yuque.com/duguaizheyuese/bufe66/ahal8e5vo39dzdmb?singleDoc#vDerT)
+* 学习[Rust](https://simonkorl.gitbook.io/r-z-rustos-guide/dai-ma-zhi-qian/)语法，完成ex1。
 * 学习Git分支管理，完成主要关卡，还剩远程关卡。
