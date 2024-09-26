@@ -1,0 +1,1 @@
+searchState.loadedDescShard("ex2", 0, "函数入口")
