@@ -18,3 +18,12 @@
 
 9/27
 * 新建分支os_learn,负责计算机导论和rCore课程的课后练习。
+* 学习[gdb](https://blog.csdn.net/weixin_45031801/article/details/134399664)调试,gcc默认生成release版本，加 -g 表示生成debug文件，用于gdb调试
+。
+* gdb重点语法：
+    * r：执行到端点
+    * b 行号：生成断点
+    * c：运行到下一个断点
+    * n：逐行执行
+    * s：逐条语句执行
+    * display 变量：显示变量的直。
