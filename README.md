@@ -26,4 +26,10 @@
     * c：运行到下一个断点
     * n：逐行执行
     * s：逐条语句执行
-    * display 变量：显示变量的直。
+    * display 变量：显示变量的值。
+
+9/28
+* rust学习：基本数据结构（支持copy）；String结构（堆生成，不支持copy）；流程控制；所有权
+    * (《Rust 程序设计语言》)[https://kaisery.github.io/trpl-zh-cn]
+    * (《通过例子学 Rust》)[https://rustwiki.org/zh-CN/rust-by-example]
+    * (Rust 语言中文社区)[https://rustcc.cn/]
