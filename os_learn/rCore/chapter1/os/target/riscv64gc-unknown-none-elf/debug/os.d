@@ -1,0 +1,1 @@
+/home/somls/Desktop/workspace/studyspace/os_learn/rCore/chapter1/os/target/riscv64gc-unknown-none-elf/debug/os: /home/somls/Desktop/workspace/studyspace/os_learn/rCore/chapter1/os/src/lang_items.rs /home/somls/Desktop/workspace/studyspace/os_learn/rCore/chapter1/os/src/main.rs
