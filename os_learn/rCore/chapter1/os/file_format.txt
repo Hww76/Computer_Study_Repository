@@ -1,0 +1,3 @@
+输入指令得到下列信息：file target/riscv64gc-unknown-none-elf/debug/os
+
+target/riscv64gc-unknown-none-elf/debug/os: ELF 64-bit LSB executable, UCB RISC-V, RVC, double-float ABI, version 1 (SYSV), statically linked, with debug_info, not stripped
