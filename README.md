@@ -2,7 +2,7 @@
 学习计算机科学与技术中个人编写的各种程序的保存仓库
 
 # TODO List
-1. [Learn Git Branching](https://learngitbranching.js.org/?locale=zh_CN) 第一次通关(24/9/29),以后每个月通关一次，直至熟练，在下方打卡。
+1. [Learn Git Branching](https://learngitbranching.js.org/?locale=zh_CN) 第一次通关(24/9/25),以后每个月通关一次，直至熟练，在下方打卡。
 2. 学习Rust语言 完成时间：
 3. 学完OS导论部分 完成时间：
 4. RISC-V处理器的指令集和部分特权操作
