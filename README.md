@@ -33,3 +33,15 @@
     * [《Rust 程序设计语言》](https://kaisery.github.io/trpl-zh-cn)
     * [《通过例子学 Rust》](https://rustwiki.org/zh-CN/rust-by-example)
     * [Rust 语言中文社区](https://rustcc.cn/)
+* rCore第一章：应用程序与基本执行环境
+    * 文件格式：file target/riscv64gc-unknown-none-elf/debug/os
+    * 文件头信息：rust-readobj -h target/riscv64gc-unknown-none-elf/debug/os
+    * 反汇编导出汇编程序：rust-objdump -S target/riscv64gc-unknown-none-elf/debug/os
+
+9/30
+* 解决rust-analyzer失效问题
+    * 我找到解决方案了，不是这个原因，是应为我把目录开到了rust课程的上一级目录，rust-analyzer默认分析当前根目录下的文件，所以就不生效了，只要调整好打开文件夹位置为项目文件夹就好了。
+    * ![alt text](b660cb85a0358318a9e378ad19cc9c3.png)
+    生效后：
+    ![alt text](<Screenshot from 2024-09-30 22-14-20.png>)
+* 完成rust课程37-47题

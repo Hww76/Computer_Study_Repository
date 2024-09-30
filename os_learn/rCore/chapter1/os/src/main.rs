@@ -2,6 +2,8 @@
 #![no_main] //告诉编译器我们没有一般意义上的 main 函数，并将原来的 main 函数删除。
 mod lang_items;
 
+use core::arch::global_asm;
+global_asm!(include_str!("entry.asm"));
 // fn main() {
 //     // println!("hello world");
 // }
