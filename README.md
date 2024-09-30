@@ -40,8 +40,8 @@
 
 9/30
 * 解决rust-analyzer失效问题
-    * 我找到解决方案了，不是这个原因，是应为我把目录开到了rust课程的上一级目录，rust-analyzer默认分析当前根目录下的文件，所以就不生效了，只要调整好打开文件夹位置为项目文件夹就好了。
-    * ![alt text](b660cb85a0358318a9e378ad19cc9c3.png)
+    * 我找到[解决方案](https://users.rust-lang.org/t/rust-analyzer-not-working-on-any-project/101773/7)了，不是这个原因，是应为我把目录开到了rust课程的上一级目录，rust-analyzer默认分析当前根目录下的文件，所以就不生效了，只要调整好打开文件夹位置为项目文件夹就好了。
+    * ![alt text](./log/b660cb85a0358318a9e378ad19cc9c3.png)
     生效后：
-    ![alt text](<Screenshot from 2024-09-30 22-14-20.png>)
+    ![alt text](<./log/Screenshot from 2024-09-30 22-14-20.png>)
 * 完成rust课程37-47题
