@@ -9,39 +9,44 @@
 5. RISC-V汇编语言
 
 # 2024年
-## 9月
-9/25
-* 学习[make](https://www.bilibili.com/video/BV1xC4y1d7Xs/)语法，看完P1-P16。[作者文档笔记](https://www.yuque.com/duguaizheyuese/bufe66/ahal8e5vo39dzdmb?singleDoc#vDerT)
-* 学习[Rust](https://simonkorl.gitbook.io/r-z-rustos-guide/dai-ma-zhi-qian/)语法，完成ex1。
-* 学习Git分支管理，完成主要关卡，还剩远程关卡。
-* 创建分支rust_learn,负责rust学习。
+## [9月](./log/2024-9.md)
 
-9/27
-* 新建分支os_learn,负责计算机导论和rCore课程的课后练习。
-* 学习[gdb](https://blog.csdn.net/weixin_45031801/article/details/134399664)调试,gcc默认生成release版本，加 -g 表示生成debug文件，用于gdb调试
-。
-* gdb重点语法：
-    * r：执行到端点
-    * b 行号：生成断点
-    * c：运行到下一个断点
-    * n：逐行执行
-    * s：逐条语句执行
-    * display 变量：显示变量的值。
+## 10月
+10/1
+* 完成rust课程48-57题
 
-9/28
-* rust学习：基本数据结构（支持copy）；String结构（堆生成，不支持copy）；流程控制；所有权
-    * [《Rust 程序设计语言》](https://kaisery.github.io/trpl-zh-cn)
-    * [《通过例子学 Rust》](https://rustwiki.org/zh-CN/rust-by-example)
-    * [Rust 语言中文社区](https://rustcc.cn/)
-* rCore第一章：应用程序与基本执行环境
-    * 文件格式：file target/riscv64gc-unknown-none-elf/debug/os
-    * 文件头信息：rust-readobj -h target/riscv64gc-unknown-none-elf/debug/os
-    * 反汇编导出汇编程序：rust-objdump -S target/riscv64gc-unknown-none-elf/debug/os
-
-9/30
-* 解决rust-analyzer失效问题
-    * 我找到[解决方案](https://users.rust-lang.org/t/rust-analyzer-not-working-on-any-project/101773/7)了，不是这个原因，是应为我把目录开到了rust课程的上一级目录，rust-analyzer默认分析当前根目录下的文件，所以就不生效了，只要调整好打开文件夹位置为项目文件夹就好了。
-    * ![alt text](./log/b660cb85a0358318a9e378ad19cc9c3.png)
-    生效后：
-    ![alt text](<./log/Screenshot from 2024-09-30 22-14-20.png>)
-* 完成rust课程37-47题
+10/2
+* Qemu模拟器
+    * qemu-system-riscv64虚拟化的是基于riscv64指令集架构的主机，下面是它的配置。
+    * -machine virt：设置设备平台为virt(待探究)
+    * -nographic：无图形化界面
+    * -bios：选择引导加载程序(bootloader)
+    * -device：loader属性可以把宿主机的一个文件放入Qemu模拟的主机中的物理内存，file指出文件路径，addr指出存放的位置。
+    ```
+    qemu-system-riscv64 \
+    -machine virt \
+    -nographic \
+    -bios ../bootloader/rustsbi-qemu.bin \
+    -device loader,file=target/riscv64gc-unknown-none-elf/release/os.bin,addr=0x80200000
+    ```
+* Qemu启动流程
+    1. 第一个阶段由固化在 Qemu 内的一小段汇编程序负责。
+    主要工作：将必要的文件载入到 Qemu 物理内存，Qemu CPU 的程序计数器（PC）会被初始化为 0x1000 ，执行的第一条指令位于物理地址 0x1000 ，接下来它将执行数条指令并跳转到物理地址 0x80000000 对应的指令处并进入第二阶段。
+    2. 第二个阶段由 bootloader 负责。
+    主要工作：bootloader 负责对计算机进行一些初始化工作，并跳转到下一阶段软件的入口，在 Qemu 上即可实现将计算机控制权移交给我们的内核镜像 os.bin
+    3. 第三个阶段则由内核镜像负责。
+* 程序内存布局
+    1. .text：存放程序的所有汇编代码。
+    2. .rodata：存放只读的全局数据。
+    3. .data：存放可修改的全局数据。
+    4. .bss：保存程序中那些未初始化的全局数据，通常由程序的加载者代为进行零初始化，即将这块区域逐字节清零。
+    5. heap：存放程序运行时动态分配的数据。
+    6. stack：函数调用上下文的保存与恢复，每个函数作用域内的局部变量，它向低地址增长。
+* 编译流程
+    1. 编译器：源文件从某门高级编程语言转化为汇编语言。
+    2. 汇编器：源文件中的文本格式的指令转化为机器码，得到二进制的目标文件。
+    3. 链接器：所有目标文件以及一些可能的外部目标文件链接在一起形成一个完整的可执行文件。第一步：将来自不同目标文件的段在目标内存布局中重新排布。第二件事情是将符号替换为具体地址。
+* 在Qemu上正确运行脚本流程：
+    1. 通过链接脚本调整内核可执行文件的内存布局，使得被执行的第一条指令位于地址 0x80200000 处。
+    2. 使得代码段地址低于其他段
+    3. 丢掉可执行文件中的元数据，得到内核镜像(只有代码段和数据段)。
