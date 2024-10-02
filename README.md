@@ -50,3 +50,113 @@
     1. 通过链接脚本调整内核可执行文件的内存布局，使得被执行的第一条指令位于地址 0x80200000 处。
     2. 使得代码段地址低于其他段
     3. 丢掉可执行文件中的元数据，得到内核镜像(只有代码段和数据段)。
+
+* 去除ELF的元数据，得到可执行文件
+    ```
+    rust-objcopy --strip-all target/riscv64gc-unknown-none-elf/release/os -O binary target/riscv64gc-unknown-none-elf/release/os.bin
+    ```
+* 比较内核可执行文件和内核镜像的大小
+    ```
+    stat target/riscv64gc-unknown-none-elf/release/os
+    stat target/riscv64gc-unknown-none-elf/release/os.bin
+    ```
+* 基于 GDB 验证启动流程,当前目录为os
+    ```
+    qemu-system-riscv64 \
+    -machine virt \
+    -nographic \
+    -bios ../bootloader/rustsbi-qemu.bin \
+    -device loader,file=target/riscv64gc-unknown-none-elf/release/os.bin,addr=0x80200000 \
+    -s -S
+    ```
+    -s：可以使 Qemu 监听本地 TCP 端口 1234 等待 GDB 客户端连接。
+    -S：可以使 Qemu 在收到 GDB 的请求后再开始运行。因此，Qemu 暂时没有任何输出。
+    注意，如果不想通过 GDB 对于 Qemu 进行调试而是直接运行 Qemu 的话，则要删掉最后一行的 -s -S 。
+
+* GDB客户端连接到Qemu
+    ```
+    riscv64-unknown-elf-gdb \
+    -ex 'file target/riscv64gc-unknown-none-elf/release/os' \
+    -ex 'set arch riscv:rv64' \
+    -ex 'target remote localhost:1234'
+    ```
+
+* gdb指令
+    从PC值位置开始，在内存中反汇编10条指令
+    ```
+    x/10i $pc
+    ```
+    单步执行
+    ```
+    si
+    ```
+    在物理地址设置断点
+    ```
+    b *0x地址值
+    ```
+    显示寄存器值
+    ```
+    p/x $sp/t0
+    p/d $x1
+    ```
+
+* Qemu模拟，反汇编的源码
+    ```
+    0x1000:     auipc   t0,0x0
+    0x1004:     addi    a1,t0,32
+    0x1008:     csrr    a0,mhartid
+    0x100c:     ld      t0,24(t0)
+    0x1010:     jr      t0
+    0x1014:     unimp
+    0x1016:     unimp
+    0x1018:     unimp
+    0x101a:     0x8000
+    0x101c:     unimp
+
+    0x80000000:         auipc   sp,0x28
+    0x80000004: mv      sp,sp
+    0x80000008: lui     t0,0x4
+    0x8000000a: addi    t1,a0,1
+    0x8000000e: add     sp,sp,t0
+    0x80000010: addi    t1,t1,-1
+    0x80000012: bnez    t1,0x8000000e
+    0x80000016: j       0x8001125a
+    0x8000001a: unimp
+    0x8000001c: addi    sp,sp,-48
+
+    0x80200004: unimp
+    0x80200006: unimp
+    0x80200008: unimp
+    0x8020000a: unimp
+    ```
+
+* 我生成的Qemu模拟，反汇编的源码
+    ```
+    0x1000:      auipc   t0,0x0
+    0x1004:      addi    a2,t0,40
+    0x1008:      csrr    a0,mhartid
+    0x100c:      ld      a1,32(t0)
+    0x1010:      ld      t0,24(t0)
+    0x1014:      jr      t0
+    0x1018:      unimp
+    0x101a:      .insn   2, 0x8000
+    0x101c:      unimp
+    0x101e:      unimp
+
+    0x80000000:  auipc   ra,0x2
+    0x80000004:  jalr    834(ra)
+    0x80000008:  auipc   ra,0x0
+    0x8000000c:  jalr    116(ra)
+    0x80000010:  j       0x80001690
+    0x80000014:  unimp
+    0x80000016:  addi    sp,sp,-80
+    0x80000018:  sd      ra,72(sp)
+    0x8000001a:  ld      a1,40(a0)
+    0x8000001c:  ld      a2,32(a0)
+
+    0x80200000:  li      ra,100
+    0x80200004:  unimp
+    0x80200006:  unimp
+    0x80200008:  unimp
+    0x8020000a:  unimp
+    ```
